@@ -1,11 +1,10 @@
 use std::env;
 use std::process;
-
-mod scheduling;
-mod ps;
 use scheduling::read_workload;
 use std::collections::BinaryHeap;
-
+mod test;
+mod scheduling;
+mod ps;
 
 fn main() {
     let args: Vec<String> = env:: args().collect();
@@ -15,7 +14,7 @@ fn main() {
     }
     let algorithm = &args[1];
     let workload_file = &args[2];
-
+    
     let workload:BinaryHeap<ps::Process>  = read_workload(workload_file);
 
     if algorithm == "fifo" {
@@ -31,11 +30,4 @@ fn main() {
         println!("usage: [fifo|sjf|stcf|rr] workload_file");
         process::exit(1);
     }
-    // let mut workload: ps::pqueue_arrival = BinaryHeap::new();
-
-    // workload.push(Process{arrival: 4, first_run: 0, duration:4, completion:0});
-    // workload.push(Process{arrival: 5, first_run: 0, duration:3, completion:0});
-    // workload.push(Process{arrival: 7, first_run: 0, duration:5, completion:0});
-    // let mut result = workload.peek();
-    // println!("{:?}", result.unwrap());
 }

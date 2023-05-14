@@ -1,11 +1,13 @@
-use super::ps::pqueue;
+use super::ps::Pqueue;
 use super::ps::Process;
 use std::collections::BinaryHeap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-pub fn read_workload(filename:&str) -> pqueue{
-    let mut workload:pqueue = BinaryHeap::new();
+
+// Reads in the file given and populate the Priority Queue with Process
+pub fn read_workload(filename:&str) -> Pqueue{
+    let mut workload:Pqueue = BinaryHeap::new();
     if let Ok(file) = File::open(filename) {
         let reader = BufReader::new(file);
         for line in reader.lines() {
@@ -25,14 +27,16 @@ pub fn read_workload(filename:&str) -> pqueue{
     workload
 }
 
-fn show_workload(workload:pqueue ) {
-    let mut xs:pqueue = workload.clone();
+// Prints out the arrival and duration of each Process in the Priority Queue
+fn show_workload(workload:Pqueue ) {
+    let mut xs:Pqueue = workload.clone();
     println!("Workload:");
     while let Some(p) = xs.pop() {
         println!("\t{} {}", p.arrival, p.duration);
     }
 }
 
+// Prints out all the attributes of each Process in the Priority Queue
 fn show_processes(processes:Vec<Process>) {
     let mut xs = processes;
     println!("Processes:");
@@ -42,12 +46,14 @@ fn show_processes(processes:Vec<Process>) {
     }
 }
 
-pub fn fifo(workload:pqueue ) -> Vec<Process>{
+// Simlulates the fifo scheduling
+pub fn fifo(workload:Pqueue ) -> Vec<Process>{
     let mut complete: Vec<Process> = Vec::new();
-    let mut pqa: pqueue = workload.clone();
+    let mut pqa: Pqueue = workload.clone();
     let mut cur = 0;
     while let Some(mut p) = pqa.pop() {
         if p.arrival > cur {
+            
             cur = p.arrival;
         }
         p.first_run = cur;
@@ -58,10 +64,11 @@ pub fn fifo(workload:pqueue ) -> Vec<Process>{
     complete
 }
 
-pub fn sjf(workload:pqueue) -> Vec<Process>{
+// Simulates the sjf scheduling
+pub fn sjf(workload:Pqueue) -> Vec<Process>{
     let mut complete: Vec<Process> = Vec::new();
-    let mut pqa: pqueue = workload.clone();
-    let mut pda: pqueue = pqueue::new();
+    let mut pqa: Pqueue = workload.clone();
+    let mut pda: Pqueue = Pqueue::new();
     let mut time = 0;
     while !pqa.is_empty() || !pda.is_empty() {
         if !pqa.is_empty() && pqa.peek().unwrap().arrival <= time {
@@ -80,10 +87,11 @@ pub fn sjf(workload:pqueue) -> Vec<Process>{
     complete
 }
 
-pub fn stcf(workload:pqueue ) -> Vec<Process>{
+// Simulates the stcf scheduling
+pub fn stcf(workload:Pqueue ) -> Vec<Process>{
     let mut complete: Vec<Process> = Vec::new();
-    let mut pqa: pqueue = workload.clone();
-    let mut pda: pqueue = pqueue::new();
+    let mut pqa: Pqueue = workload.clone();
+    let mut pda: Pqueue = Pqueue::new();
     let mut time = 0;
     while !pqa.is_empty() || !pda.is_empty() {
         if !pqa.is_empty() && pqa.peek().unwrap().arrival <= time {
@@ -110,9 +118,10 @@ pub fn stcf(workload:pqueue ) -> Vec<Process>{
     complete
 }
 
-pub fn rr(workload:pqueue) -> Vec<Process>{
+// Simluates the rr scheduling
+pub fn rr(workload:Pqueue) -> Vec<Process>{
     let mut complete: Vec<Process> = Vec::new();
-    let mut pqa: pqueue = workload.clone();
+    let mut pqa: Pqueue = workload.clone();
     let mut time = 0;
     let mut v1:Vec<Process> = Vec::new();
     let mut v2:Vec<i32> = Vec::new();
@@ -129,7 +138,7 @@ pub fn rr(workload:pqueue) -> Vec<Process>{
             if temp1.duration == temp2 {
                 temp1.first_run = time;
             }
-            temp2 -= temp2;
+            temp2 -= 1;
             if temp2 == 0 {
                 temp1.completion = time + 1;
                 complete.push(temp1.clone());
@@ -144,6 +153,7 @@ pub fn rr(workload:pqueue) -> Vec<Process>{
     complete
 }
 
+// Calculates the avg turnaround time
 fn avg_turnaround(processes:&Vec<Process>) -> f32 {
     let mut sum = 0.0;
     for i in processes {
@@ -152,6 +162,7 @@ fn avg_turnaround(processes:&Vec<Process>) -> f32 {
     sum / (processes.len() as f32)
 }
 
+// Calcualtes the avg response time
 fn avg_response(processes:&Vec<Process>) -> f32 {
     let mut sum = 0.0;
     for i in processes {
@@ -160,6 +171,7 @@ fn avg_response(processes:&Vec<Process>) -> f32 {
     sum / (processes.len() as f32)
 }
 
+// Prints out the attributes of each process, avg turnaround time, and avg response time of the given algorithm
 pub fn show_metrics(processes:Vec<Process>) {
     let avg_t = avg_turnaround(&processes);
     let avg_r = avg_response(&processes);

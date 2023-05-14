@@ -1,7 +1,5 @@
 use std::cmp::Ordering;
-
 use std::collections::BinaryHeap;
-
 
 #[derive(Eq, PartialEq, Debug, Clone)]
 pub struct Process {
@@ -12,19 +10,22 @@ pub struct Process {
   pub order_by: String
 }
 
+// Instructs how the Binary Heap should be sorted
  impl Ord for Process {
     fn cmp(&self, other: &Self) -> Ordering {
-      if self.order_by == "arrival" && other.order_by == "arrival" {
+      if self.order_by == "arrival" || other.order_by == "arrival" {
+        // Sort by arrival
         if self.arrival != other.arrival {
-          return self.arrival.cmp(&other.arrival);
+          return other.arrival.cmp(&self.arrival);
         } else {
-          return self.duration.cmp(&other.duration);
+          return other.duration.cmp(&self.duration);
         }
       } else {
+        // Sort by duration
         if self.duration != other.duration {
-          return self.duration.cmp(&other.duration);
+          return other.duration.cmp(&self.duration);
         } else {
-          return self.arrival.cmp(&other.arrival);
+          return other.arrival.cmp(&self.arrival);
         }
       } 
     } 
@@ -36,7 +37,4 @@ impl PartialOrd for Process {
     }
 }
 
-
-
-
-pub type pqueue = BinaryHeap<Process>;
+pub type Pqueue = BinaryHeap<Process>;
