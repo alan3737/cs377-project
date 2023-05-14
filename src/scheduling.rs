@@ -1,5 +1,5 @@
-use super::ps::Pqueue;
-use super::ps::Process;
+use super::scheduling_process::Pqueue;
+use super::scheduling_process::Process;
 use std::collections::BinaryHeap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};

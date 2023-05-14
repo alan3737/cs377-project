@@ -4,7 +4,7 @@ use scheduling::read_workload;
 use std::collections::BinaryHeap;
 mod test;
 mod scheduling;
-mod ps;
+mod scheduling_process;
 
 fn main() {
     let args: Vec<String> = env:: args().collect();
@@ -15,7 +15,7 @@ fn main() {
     let algorithm = &args[1];
     let workload_file = &args[2];
     
-    let workload:BinaryHeap<ps::Process>  = read_workload(workload_file);
+    let workload:BinaryHeap<scheduling_process::Process>  = read_workload(workload_file);
 
     if algorithm == "fifo" {
         scheduling::show_metrics(scheduling::fifo(workload));

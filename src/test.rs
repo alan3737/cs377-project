@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::ps::Process;
+    use crate::scheduling_process::Process;
     use crate::read_workload;
     use std::collections::BinaryHeap;
     #[test]
