@@ -17,6 +17,9 @@
 
 ## Instructions To Run The Program
   
+  Might need to have cargo installed if the commands below doesn't work
+ 
+  
   "cargo run <algorithm> <inputfile>" - the command runs the program and it takes in a algorithm and text file as argument
 
   "cargo build" - compiles the program
