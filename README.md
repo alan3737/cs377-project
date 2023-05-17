@@ -30,3 +30,7 @@
   algorithm example: fifo and sjf
 
   inputfile example: workloads/workload_01.txt
+
+## Link to Video
+
+https://drive.google.com/file/d/1Gm9lqtgoSZ-VPq4ovUG0jc01vPyBNZ1Y/view?usp=sharing
